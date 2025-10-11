@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "a700cli"
+version = "1.3.0"
+description = "Enhanced Agent700 CLI with Interactive Configuration"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Your Name", email = "your.email@example.com"},
+]
+keywords = ["agent700", "cli", "ai", "mcp", "automation"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Networking",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+dependencies = [
+    "requests>=2.32.0",
+    "python-socketio>=5.11.0",
+    "python-dotenv>=1.1.0",
+    "rich>=13.0.0",
+]
+
+[project.scripts]
+a700cli = "a700cli.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/yourusername/LinkAnalysis"
+Repository = "https://github.com/yourusername/LinkAnalysis"
+Issues = "https://github.com/yourusername/LinkAnalysis/issues"
+Documentation = "https://github.com/yourusername/LinkAnalysis#readme"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["*"]
+exclude = ["venv*", "test*", "*.pyc", "__pycache__*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.md", "*.txt", "*.ini"]
