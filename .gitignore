@@ -1,6 +1,11 @@
 # Environment variables
 .env
 
+#Demo Conversations
+.agent700_conversation.json
+.agent700_session_a2fa18e182ef.dat
+.agent700_session.dat
+
 # Python
 __pycache__/
 *.py[cod]

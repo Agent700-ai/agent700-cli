@@ -64,6 +64,23 @@ A sophisticated command-line interface for interacting with Agent700 agents with
    # Edit .env with your credentials
    ```
 
+## 📁 Local Development Files
+
+The following files are automatically generated during local development and are ignored by git:
+
+- **`.agent700_conversation.json`** - Stores conversation history and context
+- **`.agent700_session.dat`** - Contains session data and authentication tokens  
+- **`.agent700_session_*.dat`** - Additional session files with unique identifiers
+
+These files:
+- ✅ **Should be ignored by git** (already in `.gitignore`)
+- ✅ **Contain sensitive data** (authentication tokens, session info)
+- ✅ **Are user-specific** (different for each developer)
+- ✅ **Are automatically generated** when using the CLI
+- ✅ **Should not be committed** to the repository
+
+**Note**: These files are created automatically when you first run the CLI and will persist your session and conversation history locally.
+
 ## 📋 Configuration
 
 ### Automatic Configuration (Recommended)
