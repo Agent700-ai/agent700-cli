@@ -118,7 +118,23 @@ API_BASE_URL=https://api.agent700.ai  # Optional, defaults to production
 
 ## 💬 Usage
 
-### Basic Usage
+The Agent700 CLI supports two primary usage modes:
+
+### 🔄 Interactive Mode
+For back-and-forth conversations with persistent context:
+```bash
+python run_agent.py --interactive
+```
+
+### ⚡ Non-Interactive Mode  
+For single commands, automation, and workflow integration:
+```bash
+python run_agent.py "Your message here"
+```
+
+## 🚀 Non-Interactive Mode Usage
+
+### Basic Single Message
 ```bash
 python run_agent.py "Your message here"
 ```
@@ -143,14 +159,103 @@ python run_agent.py "Quick query" --quiet
 python run_agent.py --test-patterns
 ```
 
+### Verbose MCP Debugging
+```bash
+python run_agent.py "Debug MCP tools" --verbose
+```
+
+## 💬 Interactive Mode Usage
+
 ### Interactive Conversation Mode
 ```bash
 python run_agent.py --interactive
 ```
 
-### Verbose MCP Debugging
+## 🎯 Non-Interactive Mode Use Cases
+
+### Automation & Scripting
+Perfect for automated workflows, CI/CD pipelines, and batch processing:
+
 ```bash
-python run_agent.py "Debug MCP tools" --verbose
+# Automated report generation
+python run_agent.py "Generate weekly sales report" --output=json --timeout=600
+
+# Batch data processing
+python run_agent.py "Process customer feedback data" --quiet
+
+# Status checks in monitoring systems
+python run_agent.py "Check system health" --output=plain --timeout=30
+```
+
+### API Integration
+Ideal for integrating with other systems and applications:
+
+```bash
+# REST API integration
+response=$(python run_agent.py "Analyze user behavior" --output=json --quiet)
+echo "$response" | jq '.agent_response'
+
+# Webhook processing
+python run_agent.py "Process webhook data: $payload" --streaming --timeout=120
+
+# Microservice communication
+python run_agent.py "Validate transaction data" --output=json --quiet
+```
+
+### Data Processing Workflows
+Excellent for data analysis and processing pipelines:
+
+```bash
+# Data analysis with MCP tools
+python run_agent.py "Analyze dataset: $file_path" --streaming --verbose
+
+# Report generation
+python run_agent.py "Generate insights from Q4 data" --output=json --timeout=300
+
+# Data validation
+python run_agent.py "Validate data integrity" --quiet
+```
+
+### System Administration
+Great for system monitoring and administrative tasks:
+
+```bash
+# System diagnostics
+python run_agent.py "Check server performance metrics" --output=plain
+
+# Log analysis
+python run_agent.py "Analyze error logs for patterns" --streaming
+
+# Automated alerts
+python run_agent.py "Generate system status report" --output=json --quiet
+```
+
+### Development & Testing
+Perfect for development workflows and testing:
+
+```bash
+# Code analysis
+python run_agent.py "Review code quality for: $file" --output=json
+
+# Test generation
+python run_agent.py "Generate unit tests for: $function" --streaming
+
+# Documentation generation
+python run_agent.py "Create API documentation" --output=plain --timeout=180
+```
+
+### Business Process Automation
+Ideal for business workflow automation:
+
+```bash
+# Customer service automation
+python run_agent.py "Process customer inquiry: $ticket" --output=json
+
+# Content generation
+python run_agent.py "Generate marketing content for: $campaign" --streaming
+
+# Compliance checking
+python run_agent.py "Check compliance requirements" --quiet --timeout=60
 ```
 
 ## 🔧 Command Line Options
@@ -337,13 +442,15 @@ python run_agent.py "Search for information" --verbose --streaming
 
 ## 🔄 Workflow Integration
 
-Perfect for automated workflows and CI/CD pipelines:
+Perfect for automated workflows and CI/CD pipelines using non-interactive mode:
 
 ### Exit Codes
 - **0**: Success
 - **1**: Error (authentication, network, agent error)
 
-### Workflow Example
+### Workflow Examples
+
+#### Basic Automation Script
 ```bash
 #!/bin/bash
 # Workflow script example
@@ -356,6 +463,75 @@ if [ $exit_code -eq 0 ]; then
     echo "$response" | jq '.agent_response'
 else
     echo "Agent request failed"
+    exit 1
+fi
+```
+
+#### CI/CD Pipeline Integration
+```bash
+#!/bin/bash
+# GitHub Actions / Jenkins example
+
+# Generate deployment report
+python run_agent.py "Generate deployment report for $BRANCH" \
+    --output=json \
+    --timeout=300 \
+    --quiet > deployment_report.json
+
+# Check exit code
+if [ $? -eq 0 ]; then
+    echo "✅ Deployment report generated successfully"
+    # Process the JSON response
+    cat deployment_report.json | jq '.agent_response'
+else
+    echo "❌ Failed to generate deployment report"
+    exit 1
+fi
+```
+
+#### Monitoring & Alerting
+```bash
+#!/bin/bash
+# System monitoring example
+
+# Check system health
+health_status=$(python run_agent.py "Check system health metrics" \
+    --output=plain \
+    --timeout=30 \
+    --quiet)
+
+if [ $? -eq 0 ]; then
+    echo "System Status: $health_status"
+else
+    # Send alert
+    python run_agent.py "Generate system alert notification" \
+        --output=json \
+        --quiet | jq '.agent_response' | mail -s "System Alert" admin@company.com
+fi
+```
+
+#### Data Processing Pipeline
+```bash
+#!/bin/bash
+# Data processing workflow
+
+# Process incoming data
+python run_agent.py "Process data file: $INPUT_FILE" \
+    --streaming \
+    --output=json \
+    --timeout=600 > processed_data.json
+
+# Validate results
+validation_result=$(python run_agent.py "Validate processed data" \
+    --output=plain \
+    --quiet)
+
+if [ $? -eq 0 ]; then
+    echo "✅ Data processing completed: $validation_result"
+    # Move to next stage
+    mv processed_data.json /output/
+else
+    echo "❌ Data validation failed: $validation_result"
     exit 1
 fi
 ```
@@ -487,38 +663,9 @@ python run_agent.py "Start fresh conversation"
 
 ## 📝 Examples
 
-### Basic Chat
-```bash
-python run_agent.py "Hello, how can you help me today?"
-```
+### 🔄 Interactive Mode Examples
 
-### Data Analysis
-```bash
-python run_agent.py "Analyze the sales data and provide insights" --streaming
-```
-
-### MCP Tool Usage
-```bash
-python run_agent.py "Search for recent news about AI" --streaming --verbose
-```
-
-### Workflow Integration
-```bash
-python run_agent.py "Generate report for Q4 2023" --output=json --timeout=300
-```
-
-### Quiet Automation
-```bash
-result=$(python run_agent.py "Quick status check" --quiet)
-echo "Status: $result"
-```
-
-### Test Pattern Execution
-```bash
-python run_agent.py --test-patterns
-```
-
-### Interactive Conversation
+#### Interactive Conversation
 ```bash
 # Start interactive chat
 python run_agent.py --interactive
@@ -528,6 +675,68 @@ python run_agent.py --interactive --streaming
 
 # Interactive with verbose logging
 python run_agent.py --interactive --verbose
+```
+
+### ⚡ Non-Interactive Mode Examples
+
+#### Basic Single Message
+```bash
+python run_agent.py "Hello, how can you help me today?"
+```
+
+#### Data Analysis
+```bash
+python run_agent.py "Analyze the sales data and provide insights" --streaming
+```
+
+#### MCP Tool Usage
+```bash
+python run_agent.py "Search for recent news about AI" --streaming --verbose
+```
+
+#### Workflow Integration
+```bash
+python run_agent.py "Generate report for Q4 2023" --output=json --timeout=300
+```
+
+#### Quiet Automation
+```bash
+result=$(python run_agent.py "Quick status check" --quiet)
+echo "Status: $result"
+```
+
+#### Test Pattern Execution
+```bash
+python run_agent.py --test-patterns
+```
+
+#### API Integration
+```bash
+# Get structured response for API consumption
+response=$(python run_agent.py "Process user data" --output=json --quiet)
+echo "$response" | jq '.agent_response'
+```
+
+#### Batch Processing
+```bash
+# Process multiple items
+for item in $ITEMS; do
+    python run_agent.py "Process item: $item" --output=json --quiet
+done
+```
+
+#### Monitoring & Alerting
+```bash
+# System health check
+python run_agent.py "Check system status" --output=plain --timeout=30 --quiet
+```
+
+#### Content Generation
+```bash
+# Generate documentation
+python run_agent.py "Create API documentation for: $endpoint" \
+    --output=plain \
+    --timeout=180
 ```
 
 ## 🔄 Migration from Original Script
