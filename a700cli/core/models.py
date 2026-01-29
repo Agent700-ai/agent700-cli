@@ -2,7 +2,16 @@
 Data models for a700cli.
 """
 from dataclasses import dataclass
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
+
+
+@dataclass
+class ToolCall:
+    """Parsed tool call from a <tool_use> block."""
+    server: str
+    tool: str
+    arguments: Dict[str, Any]
+    id: Optional[str] = None
 
 
 @dataclass

@@ -1,8 +1,10 @@
 """
 WebSocket client for streaming responses.
+Spec: docs/specs/2026-01-29-tool-execution.md
 """
 import sys
 import json
+import re
 import threading
 from typing import Dict, Any, List, Optional
 from typing import Any as AnyType
@@ -18,6 +20,7 @@ except ImportError:
     WEBSOCKET_AVAILABLE = False
 
 from .models import AgentResponse
+from .mcp import parse_tool_use_blocks, McpExecutor
 
 
 class WebSocketClient:
@@ -37,30 +40,43 @@ class WebSocketClient:
         self.sio = None
         self.response_complete = False
         self.full_response = ""
+        self.tool_call_pending = False
         self.citations: List[str] = []
         self.mcp_results: List[Dict] = []
         self.error_occurred = False
         self.error_message = ""
         self.response_event = threading.Event()
-        
+
+        TOOL_USE_PATTERN = re.compile(r'<tool_use>[\s\S]*?</tool_use>', re.IGNORECASE)
+        self._tool_use_pattern = TOOL_USE_PATTERN
+
         if not WEBSOCKET_AVAILABLE:
             raise ImportError("python-socketio not available")
-        
-        # Ensure proper API URL format
+
         if not api_base_url.endswith('/api'):
             if api_base_url.endswith('/'):
                 self.api_base_url = api_base_url + 'api'
             else:
                 self.api_base_url = api_base_url + '/api'
-        
-        # Initialize WebSocket client
+
         self.sio = socketio.Client(
             logger=False,
             engineio_logger=False,
             reconnection=False
         )
         self._setup_handlers()
-    
+
+    @staticmethod
+    def _tool_detection(finish_reason: Optional[str], content: str, tool_use_pattern: re.Pattern) -> tuple:
+        """Return (tool_call_pending, response_complete) for given finish_reason and content."""
+        if finish_reason == 'tool_calls':
+            return (True, False)
+        if (finish_reason or '').lower() in ('end_turn', 'stop'):
+            if tool_use_pattern.search(content):
+                return (True, False)
+            return (False, True)
+        return (False, False)
+
     def _setup_handlers(self) -> None:
         """Setup WebSocket event handlers for connection, messages, and errors."""
         @self.sio.event
@@ -86,8 +102,12 @@ class WebSocketClient:
             if citations:
                 self.citations.extend(citations)
             
-            if finish_reason == 'stop':
-                self.response_complete = True
+            tool_pending, resp_complete = self._tool_detection(
+                finish_reason, self.full_response, self._tool_use_pattern
+            )
+            if tool_pending or resp_complete:
+                self.tool_call_pending = tool_pending
+                self.response_complete = resp_complete
                 self.response_event.set()
         
         @self.sio.on('mcp_tool_complete_in_content')
@@ -195,21 +215,61 @@ class WebSocketClient:
                 "mcpServerNames": agent_config['mcpServerNames']
             })
         
-        # Send message
-        self.sio.emit('send_chat_message', payload)
+        messages = [{"role": "user", "content": user_message}]
+        max_tool_rounds = 10
+        round_count = 0
         
-        # Wait for response
-        if not self.response_event.wait(timeout=timeout):
-            self.error_occurred = True
-            self.error_message = "Response timed out"
+        while round_count < max_tool_rounds:
+            round_count += 1
+            payload["messages"] = messages
+            self.tool_call_pending = False
+            self.response_complete = False
+            self.response_event.clear()
+            
+            self.sio.emit('send_chat_message', payload)
+            
+            if not self.response_event.wait(timeout=timeout):
+                self.error_occurred = True
+                self.error_message = "Response timed out"
+                break
+            
+            if self.error_occurred:
+                break
+            
+            if not self.tool_call_pending:
+                break
+            
+            tool_calls = parse_tool_use_blocks(self.full_response)
+            if not tool_calls:
+                self.response_complete = True
+                break
+            
+            if not hasattr(self.console, 'quiet') or not self.console.quiet:
+                self.console.print(f"\n[Tool execution: {len(tool_calls)} call(s)]", style="dim")
+            
+            executor = McpExecutor(
+                self.api_base_url, self.access_token, agent_uuid, agent_config
+            )
+            messages.append({"role": "assistant", "content": self.full_response})
+            for tc in tool_calls:
+                result = executor.execute(tc)
+                self.mcp_results.append(result)
+                tool_content = json.dumps(result) if isinstance(result, dict) else str(result)
+                messages.append({
+                    "role": "tool",
+                    "tool_call_id": tc.id or f"{tc.server}:{tc.tool}",
+                    "content": tool_content
+                })
+                if not hasattr(self.console, 'quiet') or not self.console.quiet:
+                    self.console.print(f"  {tc.server}/{tc.tool} -> ok", style="dim")
+            
+            self.full_response = ""
         
-        # Disconnect
         try:
             self.sio.disconnect()
-        except:
+        except Exception:
             pass
         
-        # Save conversation
         conversation_manager.add_user_message(user_message)
         if self.full_response:
             conversation_manager.add_agent_message(self.full_response)
@@ -217,7 +277,7 @@ class WebSocketClient:
         if self.error_occurred:
             return AgentResponse(content="", error=self.error_message)
         
-        if not self.response_complete:
+        if not self.response_complete and not self.full_response:
             return AgentResponse(content="", error="Response incomplete")
         
         return AgentResponse(

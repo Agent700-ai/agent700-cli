@@ -5,7 +5,7 @@ A sophisticated CLI tool for interacting with Agent700 agents with rich visual o
 enhanced MCP support, and workflow integration features.
 """
 
-__version__ = "1.3.0"
+__version__ = "1.4.0"
 __author__ = "Eric Marshall"
 __email__ = "hello@agent700.ai"
 
