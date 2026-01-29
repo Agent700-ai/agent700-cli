@@ -5,9 +5,9 @@ A sophisticated CLI tool for interacting with Agent700 agents with rich visual o
 enhanced MCP support, and workflow integration features.
 """
 
-__version__ = "1.0.0"
-__author__ = "Your Name"
-__email__ = "your.email@example.com"
+__version__ = "1.3.0"
+__author__ = "Eric Marshall"
+__email__ = "hello@agent700.ai"
 
 from .__main__ import main
 

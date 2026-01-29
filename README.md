@@ -2,6 +2,33 @@
 
 A sophisticated command-line interface for interacting with Agent700 agents with rich visual output, enhanced MCP support, session management, conversation history, and comprehensive workflow integration features.
 
+---
+
+## 🚀 Quick Start
+
+Get your first message sent in under a minute:
+
+### Prerequisites
+- Python 3.8 or higher (`python3 --version` to check)
+- pip package manager
+
+### 3 Steps to Get Started
+
+```bash
+# 1. Install the CLI
+pip install -e .
+
+# 2. Start interactive setup (you'll be prompted for email, password, and agent UUID)
+a700cli --interactive
+
+# 3. Send a message!
+a700cli "Hello, how can you help me today?"
+```
+
+**Don't know your Agent UUID?** Run `a700cli --list-agents` to see all available agents and copy the UUID.
+
+---
+
 ## ✨ Key Features
 
 ### 🎨 Rich Visual Output
@@ -44,27 +71,49 @@ A sophisticated command-line interface for interacting with Agent700 agents with
 
 ## 🚀 Installation
 
-1. **Clone or download the script**:
-   ```bash
-   # Download the script files
-   curl -O https://your-repo/A700cli.py
-   curl -O https://your-repo/requirements.txt
-   ```
+### Option 1: Install as Package (Recommended)
 
-2. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+# Install the package
+pip install -e .
 
-3. **Choose your setup method**:
-   ```bash
-   # Option A: Interactive setup (recommended)
-   python A700cli.py --interactive
+# Or install from source
+pip install -r requirements.txt
+pip install -e .
+```
+
+After installation, use the `a700cli` command:
+
+```bash
+# Interactive setup
+a700cli --interactive
+
+# Send a message
+a700cli "Your message here"
+```
+
+### Option 2: Run Directly from Source
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the module
+python -m a700cli --interactive
+# or
+python -m a700cli "Your message here"
+```
+
+### Configuration
+
+```bash
+# Option A: Interactive setup (recommended)
+a700cli --interactive
    
-   # Option B: Manual .env configuration
-   cp .env.example .env
-   # Edit .env with your credentials
-   ```
+# Option B: Manual .env configuration
+cp .env.example .env
+# Edit .env with your credentials
+```
 
 ## 📁 Local Development Files
 
@@ -90,20 +139,20 @@ These files:
 The CLI will automatically prompt for missing credentials and agent selection:
 
 ```bash
-python A700cli.py --interactive
+a700cli --interactive
 ```
 
 The tool will:
 1. **Prompt for login credentials** if not found in `.env`
 2. **Authenticate with Agent700** and show your account info
-3. **List available agents** for you to choose from
+3. **Prompt for agent UUID** if not found in `.env` (use `--list-agents` to discover agents)
 4. **Save configuration** to `.env` file for future use
 
 ### Interactive Setup Features
 
 - **🔐 Secure Login**: Password input is hidden for security
-- **🤖 Agent Discovery**: Automatically fetches and displays your available agents
-- **📋 Easy Selection**: Choose agents by number or enter UUID directly
+- **🤖 Agent UUID Prompt**: Direct UUID entry with format validation
+- **📋 Agent Discovery**: Use `--list-agents` to find available agents
 - **💾 Configuration Saving**: Automatically saves credentials to `.env` file
 - **🔄 Session Management**: Maintains authentication across conversations
 
@@ -125,42 +174,48 @@ The Agent700 CLI supports two primary usage modes:
 ### 🔄 Interactive Mode
 For back-and-forth conversations with persistent context:
 ```bash
-python A700cli.py --interactive
+a700cli --interactive
 ```
 
 ### ⚡ Non-Interactive Mode  
 For single commands, automation, and workflow integration:
 ```bash
-python A700cli.py "Your message here"
+a700cli "Your message here"
 ```
 
-## 🆕 Enhanced Features in A700cli.py
+## 🆕 Enhanced Features
 
 ### 📁 File I/O Support
 ```bash
 # Read message from file
-python A700cli.py --input-file prompt.txt
+a700cli --input-file prompt.txt
 
 # Read from stdin
-echo "Your message" | python A700cli.py
+echo "Your message" | a700cli
 
 # Write response to file
-python A700cli.py "Generate report" --output-file report.txt
+a700cli "Generate report" --output-file report.txt
 ```
 
 ### 🔇 Quiet Mode for Scripting
 ```bash
 # Minimal output for automation
-python A700cli.py "Quick query" --quiet
+a700cli "Quick query" --quiet
 
 # Perfect for piping
-result=$(python A700cli.py "Process data" --quiet)
+result=$(a700cli "Process data" --quiet)
 ```
 
-### 🤖 Interactive Agent Selection
+### 🤖 Agent Discovery
 ```bash
-# Automatically lists and lets you select agents
-python A700cli.py --interactive
+# List available agents
+a700cli --list-agents
+
+# Search for agents
+a700cli --list-agents --search "code"
+
+# Then use the UUID when prompted
+a700cli --interactive
 ```
 
 ### 💬 Enhanced Interactive Commands
@@ -173,35 +228,35 @@ python A700cli.py --interactive
 
 ### Basic Single Message
 ```bash
-python A700cli.py "Your message here"
+a700cli "Your message here"
 ```
 
 ### File Input/Output
 ```bash
 # Read from file
-python A700cli.py --input-file prompt.txt
+a700cli --input-file prompt.txt
 
 # Write to file
-python A700cli.py "Generate report" --output-file report.txt
+a700cli "Generate report" --output-file report.txt
 
 # Read from stdin
-echo "Your message" | python A700cli.py
+echo "Your message" | a700cli
 ```
 
 ### Quiet Mode for Automation
 ```bash
 # Minimal output for scripts
-python A700cli.py "Quick query" --quiet
+a700cli "Quick query" --quiet
 
 # Perfect for piping
-result=$(python A700cli.py "Process data" --quiet)
+result=$(a700cli "Process data" --quiet)
 ```
 
 ## 💬 Interactive Mode Usage
 
 ### Interactive Conversation Mode
 ```bash
-python A700cli.py --interactive
+a700cli --interactive
 ```
 
 ## 🎯 Non-Interactive Mode Use Cases
@@ -211,13 +266,13 @@ Perfect for automated workflows, CI/CD pipelines, and batch processing:
 
 ```bash
 # Automated report generation
-python A700cli.py "Generate weekly sales report" --output-file report.txt
+a700cli "Generate weekly sales report" --output-file report.txt
 
 # Batch data processing
-python A700cli.py "Process customer feedback data" --quiet
+a700cli "Process customer feedback data" --quiet
 
 # Status checks in monitoring systems
-python A700cli.py "Check system health" --quiet
+a700cli "Check system health" --quiet
 ```
 
 ### API Integration
@@ -225,14 +280,14 @@ Ideal for integrating with other systems and applications:
 
 ```bash
 # REST API integration
-response=$(python A700cli.py "Analyze user behavior" --quiet)
+response=$(a700cli "Analyze user behavior" --quiet)
 echo "$response"
 
 # Webhook processing
-python A700cli.py "Process webhook data: $payload" --output-file result.txt
+a700cli "Process webhook data: $payload" --output-file result.txt
 
 # Microservice communication
-python A700cli.py "Validate transaction data" --quiet
+a700cli "Validate transaction data" --quiet
 ```
 
 ### Data Processing Workflows
@@ -240,13 +295,13 @@ Excellent for data analysis and processing pipelines:
 
 ```bash
 # Data analysis with MCP tools
-python A700cli.py "Analyze dataset: $file_path" --input-file data.txt
+a700cli "Analyze dataset: $file_path" --input-file data.txt
 
 # Report generation
-python A700cli.py "Generate insights from Q4 data" --output-file insights.txt
+a700cli "Generate insights from Q4 data" --output-file insights.txt
 
 # Data validation
-python A700cli.py "Validate data integrity" --quiet
+a700cli "Validate data integrity" --quiet
 ```
 
 ### System Administration
@@ -254,13 +309,13 @@ Great for system monitoring and administrative tasks:
 
 ```bash
 # System diagnostics
-python A700cli.py "Check server performance metrics" --quiet
+a700cli "Check server performance metrics" --quiet
 
 # Log analysis
-python A700cli.py "Analyze error logs for patterns" --input-file logs.txt
+a700cli "Analyze error logs for patterns" --input-file logs.txt
 
 # Automated alerts
-python A700cli.py "Generate system status report" --output-file status.txt --quiet
+a700cli "Generate system status report" --output-file status.txt --quiet
 ```
 
 ### Development & Testing
@@ -268,13 +323,13 @@ Perfect for development workflows and testing:
 
 ```bash
 # Code analysis
-python A700cli.py "Review code quality for: $file" --input-file code.py --output-file analysis.txt
+a700cli "Review code quality for: $file" --input-file code.py --output-file analysis.txt
 
 # Test generation
-python A700cli.py "Generate unit tests for: $function" --output-file tests.py
+a700cli "Generate unit tests for: $function" --output-file tests.py
 
 # Documentation generation
-python A700cli.py "Create API documentation" --output-file docs.md
+a700cli "Create API documentation" --output-file docs.md
 ```
 
 ### Business Process Automation
@@ -282,13 +337,13 @@ Ideal for business workflow automation:
 
 ```bash
 # Customer service automation
-python A700cli.py "Process customer inquiry: $ticket" --output-file response.txt
+a700cli "Process customer inquiry: $ticket" --output-file response.txt
 
 # Content generation
-python A700cli.py "Generate marketing content for: $campaign" --output-file content.txt
+a700cli "Generate marketing content for: $campaign" --output-file content.txt
 
 # Compliance checking
-python A700cli.py "Check compliance requirements" --quiet
+a700cli "Check compliance requirements" --quiet
 ```
 
 ## 🔧 Command Line Options
@@ -301,6 +356,12 @@ python A700cli.py "Check compliance requirements" --quiet
 | `--output-file, -o` | Write response to file | None |
 | `--quiet, -q` | Minimal output for workflows | Verbose output |
 | `--help-auth` | Show authentication environment variables | None |
+| `--list-agents, -l` | List available agents with pagination and search | None |
+| `--page` | Page number for agent list (used with --list-agents) | 1 |
+| `--limit` | Results per page (max: 100, used with --list-agents) | 20 |
+| `--search` | Filter agents by name (case-insensitive, used with --list-agents) | None |
+| `--format` | Output format for --list-agents (table or json) | table |
+| `--streaming` | Use WebSocket streaming mode | HTTP mode |
 
 ## 📊 Output Formats
 
@@ -354,13 +415,13 @@ Citations: source1, source2
 ### Usage Examples
 ```bash
 # Start interactive conversation
-python run_agent.py --interactive
+a700cli --interactive
 
 # Interactive with streaming
-python run_agent.py --interactive --streaming
+a700cli --interactive --streaming
 
 # Interactive with verbose logging
-python run_agent.py --interactive --verbose
+a700cli --interactive --verbose
 ```
 
 ### Interactive Mode Features
@@ -373,10 +434,10 @@ python run_agent.py --interactive --verbose
 ## 🔐 Interactive Setup Process
 
 ### First-Time Setup
-When you run the CLI without a `.env` file, it will guide you through setup:
+When you run the CLI without a `.env` file or when `AGENT_UUID` is missing, it will guide you through setup:
 
 ```bash
-python run_agent.py --interactive
+a700cli --interactive
 ```
 
 **Step 1: Authentication**
@@ -388,34 +449,43 @@ Some configuration is missing. Let's set it up interactively.
 🔒 Password: [hidden input]
 ```
 
-**Step 2: Agent Selection**
+**Step 2: Agent UUID Entry**
 ```
-🤖 Available Agents:
-
-1. Customer Support Agent
-   ID: 123e4567-e89b-12d3-a456-426614174000
-   Description: Handles customer inquiries and support tickets
-
-2. Data Analysis Agent
-   ID: 987fcdeb-51a2-43d1-b789-123456789abc
-   Description: Analyzes data and generates insights
-
-Select agent (number) or enter UUID: 1
-✅ Selected: Customer Support Agent
-```
-
-**Step 3: Save Configuration**
-```
-💾 Save this configuration to .env file? (y/N): y
+🔍 No agent UUID found. Enter an agent UUID to continue.
+💡 Tip: Use 'a700cli --list-agents' to see available agents.
+? Enter Agent UUID: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+🔍 Fetching agent configuration...
+✓ Agent: Code Reviewer
 ✅ Configuration saved to .env file
 ```
 
+**Note:** If you enter an invalid UUID format, you'll see:
+```
+❌ Invalid UUID format. Expected format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+```
+
 ### Agent Discovery
-The CLI automatically:
-- **Fetches your available agents** from Agent700
-- **Shows agent names and descriptions** for easy selection
-- **Allows selection by number** or direct UUID entry
-- **Validates agent access** before proceeding
+To find available agents, use the `--list-agents` command:
+
+```bash
+# List all agents (paginated)
+a700cli --list-agents
+
+# Search for agents by name
+a700cli --list-agents --search "code"
+
+# Get JSON output for scripting
+a700cli --list-agents --format json
+
+# Navigate pages
+a700cli --list-agents --page 2 --limit 50
+```
+
+The CLI will:
+- **Prompt for UUID directly** when `AGENT_UUID` is missing (no auto-fetching)
+- **Validate UUID format** before making API calls
+- **Show helpful error messages** if agent is not found
+- **Provide a separate discovery command** for finding agents
 
 ## 🔗 WebSocket vs HTTP Modes
 
@@ -426,7 +496,7 @@ The CLI automatically:
 - **Automatic fallback to HTTP on failure**
 
 ```bash
-python run_agent.py "Stream this response" --streaming
+a700cli "Stream this response" --streaming
 ```
 
 ### HTTP Mode
@@ -435,7 +505,7 @@ python run_agent.py "Stream this response" --streaming
 - **More reliable for network issues**
 
 ```bash
-python run_agent.py "Process this" # HTTP mode (default)
+a700cli "Process this" # HTTP mode (default)
 ```
 
 ## 🛠️ MCP Tool Support
@@ -462,13 +532,13 @@ The enhanced script provides superior MCP integration with comprehensive debuggi
 ### MCP Debugging
 ```bash
 # Enable verbose MCP logging
-python run_agent.py "Use MCP tools" --verbose
+a700cli "Use MCP tools" --verbose
 
 # Test MCP patterns systematically
-python run_agent.py --test-patterns
+a700cli --test-patterns
 
 # Debug specific MCP issues
-python run_agent.py "Search for information" --verbose --streaming
+a700cli "Search for information" --verbose --streaming
 ```
 
 ## 🔄 Workflow Integration
@@ -486,7 +556,7 @@ Perfect for automated workflows and CI/CD pipelines using non-interactive mode:
 #!/bin/bash
 # Workflow script example
 
-response=$(python run_agent.py "Analyze deployment" --output=json --quiet)
+response=$(a700cli "Analyze deployment" --output=json --quiet)
 exit_code=$?
 
 if [ $exit_code -eq 0 ]; then
@@ -504,7 +574,7 @@ fi
 # GitHub Actions / Jenkins example
 
 # Generate deployment report
-python run_agent.py "Generate deployment report for $BRANCH" \
+a700cli "Generate deployment report for $BRANCH" \
     --output=json \
     --timeout=300 \
     --quiet > deployment_report.json
@@ -526,7 +596,7 @@ fi
 # System monitoring example
 
 # Check system health
-health_status=$(python run_agent.py "Check system health metrics" \
+health_status=$(a700cli "Check system health metrics" \
     --output=plain \
     --timeout=30 \
     --quiet)
@@ -535,7 +605,7 @@ if [ $? -eq 0 ]; then
     echo "System Status: $health_status"
 else
     # Send alert
-    python run_agent.py "Generate system alert notification" \
+    a700cli "Generate system alert notification" \
         --output=json \
         --quiet | jq '.agent_response' | mail -s "System Alert" admin@company.com
 fi
@@ -547,13 +617,13 @@ fi
 # Data processing workflow
 
 # Process incoming data
-python run_agent.py "Process data file: $INPUT_FILE" \
+a700cli "Process data file: $INPUT_FILE" \
     --streaming \
     --output=json \
     --timeout=600 > processed_data.json
 
 # Validate results
-validation_result=$(python run_agent.py "Validate processed data" \
+validation_result=$(a700cli "Validate processed data" \
     --output=plain \
     --quiet)
 
@@ -571,7 +641,7 @@ fi
 ```dockerfile
 FROM python:3.9-slim
 
-COPY run_agent.py requirements.txt /app/
+COPY a700cli/ requirements.txt pyproject.toml /app/
 WORKDIR /app
 
 RUN pip install -r requirements.txt
@@ -579,7 +649,7 @@ RUN pip install -r requirements.txt
 # Copy environment file
 COPY .env /app/
 
-ENTRYPOINT ["python", "run_agent.py"]
+ENTRYPOINT ["a700cli"]
 ```
 
 ## 🎯 Use Cases
@@ -587,58 +657,72 @@ ENTRYPOINT ["python", "run_agent.py"]
 ### Development & Testing
 ```bash
 # Test agent responses with rich output
-python run_agent.py "Test query" --streaming --verbose
+a700cli "Test query" --streaming --verbose
 
 # Debug MCP tool execution
-python run_agent.py "Use search tool" --output=json --verbose
+a700cli "Use search tool" --output=json --verbose
 
 # Run systematic test patterns
-python run_agent.py --test-patterns
+a700cli --test-patterns
 ```
 
 ### Automation & CI/CD
 ```bash
 # Automated report generation
-python run_agent.py "Generate weekly report" --output=json --timeout=600
+a700cli "Generate weekly report" --output=json --timeout=600
 
 # Quiet mode for scripts
-python run_agent.py "Process data batch" --quiet
+a700cli "Process data batch" --quiet
 ```
 
 ### Data Analysis Workflows
 ```bash
 # Process with MCP tools and get structured output
-python run_agent.py "Analyze this dataset" --streaming --output=json
+a700cli "Analyze this dataset" --streaming --output=json
 ```
 
 ## 🐛 Troubleshooting
 
 ### Common Issues
 
-#### Connection Errors
-```bash
-# Test with HTTP mode if WebSocket fails
-python run_agent.py "test" --no-streaming --verbose
-```
+| Issue | Solution |
+|-------|----------|
+| **Authentication failed** | Check EMAIL and PASSWORD in your `.env` file. Reset your password at Agent700 if needed. |
+| **Invalid UUID format** | UUID must be `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`. Run `a700cli --list-agents` to find valid UUIDs. |
+| **Agent not found (404)** | Run `a700cli --list-agents` and copy the exact UUID from the list. |
+| **No message provided** | Use `a700cli "your message"` or `a700cli --interactive` for chat mode. |
+| **Connection / WebSocket errors** | Try without `--streaming` (uses HTTP mode). Check your network/firewall. |
+| **Import or dependency errors** | Run `pip install -r requirements.txt` from the project directory. |
 
-#### Authentication Issues
-```bash
-# Verify credentials with verbose logging
-python run_agent.py "test" --verbose
-```
+### Debug Commands
 
-#### MCP Tool Problems
 ```bash
+# Verbose logging for authentication issues
+a700cli "test" --verbose
+
+# Use HTTP mode if WebSocket fails
+a700cli "test"  # HTTP is default, no --streaming flag
+
 # Check agent MCP configuration
-python run_agent.py "test" --verbose --streaming
+a700cli "test" --verbose --streaming
 ```
 
 ### Error Messages
-The enhanced script provides detailed error messages with:
+The CLI provides detailed error messages with:
 - **Root cause identification**
 - **Troubleshooting suggestions**
 - **Configuration guidance**
 - **Network diagnostics**
+
+---
+
+## 📞 Support
+
+**Need help?**
+
+- Email: hello@agent700.ai
+- Documentation: https://agent700.ai/docs
+- Run `a700cli --help` for all available options
 
 ## 💾 Session Management
 
@@ -657,11 +741,11 @@ The enhanced script provides detailed error messages with:
 ### Session Features
 ```bash
 # Sessions are automatically managed
-python run_agent.py "Continue our conversation"  # Uses existing session
+a700cli "Continue our conversation"  # Uses existing session
 
 # Force new session
 rm ~/.agent700/session.json
-python run_agent.py "Start fresh conversation"
+a700cli "Start fresh conversation"
 ```
 
 ## 🔒 Security Features
@@ -699,31 +783,31 @@ python run_agent.py "Start fresh conversation"
 #### Interactive Conversation
 ```bash
 # Start interactive chat
-python A700cli.py --interactive
+a700cli --interactive
 ```
 
 ### ⚡ Non-Interactive Mode Examples
 
 #### Basic Single Message
 ```bash
-python A700cli.py "Hello, how can you help me today?"
+a700cli "Hello, how can you help me today?"
 ```
 
 #### File Input/Output
 ```bash
 # Read from file
-python A700cli.py --input-file prompt.txt
+a700cli --input-file prompt.txt
 
 # Write to file
-python A700cli.py "Generate report" --output-file report.txt
+a700cli "Generate report" --output-file report.txt
 
 # Read from stdin
-echo "Your message" | python A700cli.py
+echo "Your message" | a700cli
 ```
 
 #### Quiet Automation
 ```bash
-result=$(python A700cli.py "Quick status check" --quiet)
+result=$(a700cli "Quick status check" --quiet)
 echo "Status: $result"
 ```
 
@@ -731,33 +815,39 @@ echo "Status: $result"
 ```bash
 # Process multiple items
 for item in $ITEMS; do
-    python A700cli.py "Process item: $item" --quiet
+    a700cli "Process item: $item" --quiet
 done
 ```
 
 #### Content Generation
 ```bash
 # Generate documentation
-python A700cli.py "Create API documentation for: $endpoint" \
+a700cli "Create API documentation for: $endpoint" \
     --output-file docs.md
 ```
 
-## 🔄 Migration from Original Script
+## 🔄 Migration from Previous Versions
 
-### Key Differences in A700cli.py
+### Single Entry Point
+The CLI now uses a single official entry point: `a700cli` (installed via package) or `python -m a700cli` (run from source).
+
+### Key Features
 1. **Enhanced CLI Interface**: Proper argparse-based command-line parsing
 2. **File I/O Support**: Read from files, write to files, stdin/stdout integration
-3. **Interactive Agent Selection**: Automatic agent discovery and selection
-4. **Session Management**: Persistent sessions with pickle-based storage
-5. **Conversation History**: JSON-based conversation tracking
-6. **Quiet Mode**: Perfect for automation and scripting
-7. **Rich Console Support**: Beautiful terminal output with fallback
+3. **WebSocket Streaming**: Real-time streaming with `--streaming` flag
+4. **Interactive UUID Prompt**: Direct UUID entry with validation (use `--list-agents` for discovery)
+5. **Session Management**: Persistent sessions with automatic token refresh
+6. **Conversation History**: JSON-based conversation tracking
+7. **Quiet Mode**: Perfect for automation and scripting (`--quiet`)
+8. **Rich Console Support**: Beautiful terminal output with fallback
+9. **Agent Discovery**: Paginated agent listing with search (`--list-agents`)
 
 ### Migration Steps
-1. Install new dependencies: `pip install -r requirements.txt`
-2. Update your scripts to use `A700cli.py` instead of `run_agent.py`
-3. Use new command-line options (`--input-file`, `--output-file`, `--quiet`)
-4. Test with your existing .env configuration
+1. Install the package: `pip install -e .` (or `pip install -r requirements.txt` for dependencies only)
+2. Use the `a700cli` command instead of `python A700cli.py` or `python run_agent.py`
+3. All features are now available in the single entry point
+4. Use `--streaming` flag for WebSocket mode (previously default in `run_agent.py`)
+5. Test with your existing .env configuration
 
 ## 🤝 Contributing
 
@@ -772,28 +862,30 @@ pip install -r requirements-dev.txt  # If available
 ### Testing
 ```bash
 # Run basic tests
-python A700cli.py "test"
+a700cli "test"
 
 # Test different modes
-python A700cli.py "test" --quiet
-python A700cli.py "test" --input-file test.txt
-python A700cli.py "test" --output-file result.txt
+a700cli "test" --quiet
+a700cli "test" --input-file test.txt
+a700cli "test" --output-file result.txt
 
 # Test interactive mode
-python A700cli.py --interactive
+a700cli --interactive
 ```
 
 ## 📄 License
 
-This enhanced script maintains the same license as the original Agent700 CLI tool.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🔗 Related Resources
 
-- [Agent700 Documentation](https://docs.agent700.ai)
+- [Agent700 Documentation](https://agent700.ai/docs)
 - [MCP Protocol Specification](https://spec.modelcontextprotocol.io)
 - [Rich Python Library](https://rich.readthedocs.io)
 - [WebSocket Documentation](https://python-socketio.readthedocs.io)
 
 ---
 
-**Happy chatting with your enhanced Agent700 CLI! 🚀**
+**Happy chatting with your enhanced Agent700 CLI!** 🚀
+
+Need help? Email hello@agent700.ai

@@ -66,7 +66,7 @@ echo.
 echo To use the Agent700 CLI:
 echo 1. Activate the virtual environment: venv\Scripts\activate.bat
 echo 2. Edit .env with your credentials
-echo 3. Run: python run_agent.py "Your message here"
+echo 3. Run: a700cli "Your message here"
 echo.
 echo To deactivate the virtual environment: deactivate
 pause

@@ -1,0 +1,2 @@
+This is a test message from a file.
+Please process this message and provide a response.

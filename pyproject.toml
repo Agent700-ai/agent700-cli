@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "MIT"}
 authors = [
-    {name = "Your Name", email = "your.email@example.com"},
+    {name = "Eric Marshall", email = "hello@agent700.ai"},
 ]
 keywords = ["agent700", "cli", "ai", "mcp", "automation"]
 classifiers = [
@@ -40,10 +40,8 @@ dependencies = [
 a700cli = "a700cli.__main__:main"
 
 [project.urls]
-Homepage = "https://github.com/yourusername/LinkAnalysis"
-Repository = "https://github.com/yourusername/LinkAnalysis"
-Issues = "https://github.com/yourusername/LinkAnalysis/issues"
-Documentation = "https://github.com/yourusername/LinkAnalysis#readme"
+Homepage = "https://agent700.ai"
+Documentation = "https://agent700.ai/docs"
 
 [tool.setuptools.packages.find]
 where = ["."]
