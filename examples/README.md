@@ -73,6 +73,8 @@ a700cli --list-agents
 a700cli --list-agents --search "code"
 ```
 
+You can run chat or interactive mode without setting `AGENT_UUID` in `.env`; when prompted, enter an agent UUID (from `--list-agents`). To switch agents, run again and enter a different UUID when prompted.
+
 ## Need Help?
 
 - Run `a700cli --help` for all options

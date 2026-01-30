@@ -62,6 +62,10 @@ Agent: Python 3.12 introduces several key features:
 
 **What it does:** Discover, create, update, and manage AI agents.
 
+**Agent selection without upfront config**
+
+You don't have to define an agent in `.env` before running. When `AGENT_UUID` is missing, the CLI prompts you to enter an agent UUID. Use `--list-agents` (and `--search`) to discover agents; then run chat or interactive and enter the UUID when prompted. To use a different agent later, run the CLI again and enter a different UUID when prompted; the chosen agent is saved to `.env` for the next run.
+
 | Action | Command | Purpose |
 |--------|---------|---------|
 | List agents | `--list-agents` | Find available agents |
@@ -84,7 +88,7 @@ Available Agents (Page 1 of 1)
 │ Security Reviewer  │ i9j0k1l2...  │
 └────────────────────┴──────────────┘
 
-Use 'a700cli' to activate an agent
+Choose an agent when you run the CLI (e.g. run chat or interactive and enter the UUID when prompted).
 ```
 
 **Sample: Creating an Agent**

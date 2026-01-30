@@ -27,6 +27,8 @@ a700cli "Hello, how can you help me today?"
 
 **Don't know your Agent UUID?** Run `a700cli --list-agents` to see all available agents and copy the UUID.
 
+You don't need to configure an agent in advance; the CLI will prompt you to choose one when needed (use `--list-agents` to discover agents).
+
 ---
 
 ## ✨ Key Features
@@ -147,6 +149,8 @@ The tool will:
 2. **Authenticate with Agent700** and show your account info
 3. **Prompt for agent UUID** if not found in `.env` (use `--list-agents` to discover agents)
 4. **Save configuration** to `.env` file for future use
+
+**Agent selection:** You don't need to define an agent up front. When `AGENT_UUID` is missing, the CLI prompts you to choose one; use `--list-agents` to find IDs. To switch agents later, run the CLI again and enter a different UUID when prompted (the chosen agent is saved to `.env`).
 
 ### Interactive Setup Features
 
@@ -465,6 +469,8 @@ Some configuration is missing. Let's set it up interactively.
 ```
 
 ### Agent Discovery
+You can run without any pre-set agent; when `AGENT_UUID` is missing, the CLI prompts you to enter one. To switch agents, run the CLI again and enter a different UUID when prompted.
+
 To find available agents, use the `--list-agents` command:
 
 ```bash
